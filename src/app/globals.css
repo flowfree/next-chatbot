@@ -2,15 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-.chatbot ul,
-.chatbot ol {
-  margin: 16px 0;
-  margin-left: 38px;
+.markdown ul,
+.markdown ol {
+  list-style-position: inside;
 }
 
-.chatbot ol li {
+.markdown ol li {
   list-style: decimal;
-  margin-left: 20px;
-  padding-left: 10px;
-  margin: 8px 0;
+  list-style-position: outside;
+  margin-left: 16px;
+  padding-left: 8px;
+  margin-bottom: 8px;
+}
+
+.markdown h2 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.markdown pre {
+  margin-bottom: 16px;
+}
+
+.markdown pre code {
+  font-size: 14px;
+  font-family: monaco, monoospace;
+}
+
+.markdown p code {
+  font-size: 14px;
+  font-family: monaco, monoospace;
+  padding: 2px 4px;
+  background: #eee;
+}
+
+.markdown p {
+  margin-bottom: 16px;
 }

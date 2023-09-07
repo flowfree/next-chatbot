@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
+import ReactMarkdown from 'react-markdown'
+import SyntaxHighlighter from 'react-syntax-highlighter'
+import { monokai } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 interface Message {
   role: 'system' | 'assistant' | 'user'
@@ -15,15 +17,16 @@ export default function ChatBot() {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    const newMessages: Message[] = [...messages, { role: 'user', content: question }]
+    const newMessages: Message[] = [
+      ...messages, 
+      { role: 'user', content: question }
+    ]
     setMessages(newMessages)
     setQuestion('')
 
     const response = await fetch('/api/chat', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: newMessages })
     })
 
@@ -32,29 +35,46 @@ export default function ChatBot() {
   }
 
   return (
-    <div className="chatbot w-full">
+    <div className="chatbot w-full pb-8">
 
-      <div className="mt-4 flex flex-col gap-4 text-base leading-normal text-gray-600">
+      <ul className="mt-4 flex flex-col gap-2 text-base leading-normal text-gray-600">
         {messages.map((message, idx) => (
-          <div key={idx} className="flex gap-4">
+          <li key={idx} className="flex gap-4">
             <div>
-              <Avatar initial={message.role === 'user' ? 'NA' : 'B'} />
+              <Avatar initial={message.role === 'user' ? 'N' : 'B'} />
             </div>
-            <div className="pt-1">
-              <ReactMarkdown>
+            <div className="pt-1 markdown">
+              <ReactMarkdown
+                components={{
+                  code({ node, inline, className, children, ...props }) {
+                    const match = /language-(\w+)/.exec(className || "");
+                    return !inline && match ? (
+                      <div>
+                        <SyntaxHighlighter style={monokai}>
+                          {String(children).replace(/\n$/, "")}
+                        </SyntaxHighlighter>
+                      </div>
+                    ) : (
+                      <code {...props} className={className}>
+                        {children}
+                      </code>
+                    );
+                  }
+                }}
+              >
                 {message.content}
               </ReactMarkdown>
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
 
-      <form action="/api/chat" method="post" className="mt-4" onSubmit={handleSubmit}>
+      <form action="/api/chat" method="post" className="mt-2" onSubmit={handleSubmit}>
         <div className="flex gap-2">
           <input 
             type="text" 
             name="question" 
-            className="grow p-2 rounded-md border border-gray-200 outline-none focus:border-gray-300" 
+            className="grow p-2 rounded-md border border-gray-200 outline-none focus:border-indigo-500" 
             placeholder="Send a message" 
             value={question}
             onChange={e => setQuestion(e.target.value)}
@@ -72,7 +92,7 @@ export default function ChatBot() {
 
 function Avatar({ initial }: { initial: string }) {
   return (
-    <div className="w-8 h-8 flex items-center justify-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-700">
+    <div className="w-10 h-10 flex items-center justify-center rounded-md bg-indigo-100 text-sm font-bold text-indigo-700">
       {initial.toUpperCase()}
     </div>
   )
