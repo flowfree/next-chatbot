@@ -16,10 +16,12 @@ export default function ChatBot() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    console.log(question)
 
     const newMessages: Message[] = [
       ...messages, 
-      { role: 'user', content: question }
+      { role: 'user', content: question },
+      { role: 'assistant', content: '...'}
     ]
     setMessages(newMessages)
     setQuestion('')
@@ -30,8 +32,28 @@ export default function ChatBot() {
       body: JSON.stringify({ messages: newMessages })
     })
 
-    const { content } = await response.json()
-    setMessages((m) => ([...m, { role: 'assistant', content }]))
+    const stream = response.body
+
+    if (stream === null) {
+      throw new Error('Stream is null')
+    }
+
+    const reader = stream.getReader()
+    const textDecoder = new TextDecoder('utf-8')
+    
+    let content = ''
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) {
+        break
+      }
+      content += textDecoder.decode(value)
+      setMessages(messages => ([
+        ...messages.slice(0, -1),
+        { role: 'assistant', content }
+      ]))
+    }
+
   }
 
   return (

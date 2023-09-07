@@ -13,6 +13,7 @@
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "@types/react-syntax-highlighter": "^15.5.7",
+    "ai": "^2.2.11",
     "autoprefixer": "10.4.15",
     "encoding": "^0.1.13",
     "eslint": "8.48.0",
