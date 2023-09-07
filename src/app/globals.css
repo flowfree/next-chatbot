@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.chatbot ul,
+.chatbot ol {
+  margin: 16px 0;
+  margin-left: 38px;
+}
+
+.chatbot ol li {
+  list-style: decimal;
+  margin-left: 20px;
+  padding-left: 10px;
+  margin: 8px 0;
+}

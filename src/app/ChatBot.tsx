@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 
 interface Message {
   role: 'system' | 'assistant' | 'user'
@@ -31,25 +32,29 @@ export default function ChatBot() {
   }
 
   return (
-    <div className="w-full">
+    <div className="chatbot w-full">
 
-      <ul className="flex flex-col">
+      <div className="mt-4 flex flex-col gap-4 text-base leading-normal text-gray-600">
         {messages.map((message, idx) => (
-          <li key={idx} className="flex gap-2">
-            <p>
-              <strong>{message.role === 'user' ? 'You: ' : 'Bot: '}</strong>
-              {message.content}
-            </p>
-          </li>
+          <div key={idx} className="flex gap-4">
+            <div>
+              <Avatar initial={message.role === 'user' ? 'NA' : 'B'} />
+            </div>
+            <div className="pt-1">
+              <ReactMarkdown>
+                {message.content}
+              </ReactMarkdown>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
 
-      <form action="/api/chat" method="post" className="" onSubmit={handleSubmit}>
+      <form action="/api/chat" method="post" className="mt-4" onSubmit={handleSubmit}>
         <div className="flex gap-2">
           <input 
             type="text" 
             name="question" 
-            className="grow p-2 rounded-md border border-gray-300 outline-none focus:border-gray-400" 
+            className="grow p-2 rounded-md border border-gray-200 outline-none focus:border-gray-300" 
             placeholder="Send a message" 
             value={question}
             onChange={e => setQuestion(e.target.value)}
@@ -61,6 +66,14 @@ export default function ChatBot() {
         </div>
       </form>
 
+    </div>
+  )
+}
+
+function Avatar({ initial }: { initial: string }) {
+  return (
+    <div className="w-8 h-8 flex items-center justify-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-700">
+      {initial.toUpperCase()}
     </div>
   )
 }
