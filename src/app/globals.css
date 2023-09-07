@@ -5,10 +5,19 @@
 .markdown ul,
 .markdown ol {
   list-style-position: inside;
+  margin-bottom: 16px;
 }
 
 .markdown ol li {
   list-style: decimal;
+  list-style-position: outside;
+  margin-left: 16px;
+  padding-left: 8px;
+  margin-bottom: 8px;
+}
+
+.markdown ul li {
+  list-style: square;
   list-style-position: outside;
   margin-left: 16px;
   padding-left: 8px;

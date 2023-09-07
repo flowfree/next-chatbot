@@ -52,18 +52,21 @@ export default function ChatBot() {
         ...messages.slice(0, -1),
         { role: 'assistant', content }
       ]))
-    }
 
+      // Always scroll to the bottom of the page
+      document.documentElement.scrollTop = document.documentElement.scrollHeight;
+      document.body.scrollTop = document.body.scrollHeight;
+    }
   }
 
   return (
     <div className="chatbot w-full pb-8">
 
-      <ul className="mt-4 flex flex-col gap-2 text-base leading-normal text-gray-600">
+      <ul className="flex flex-col gap-2 text-base leading-normal text-gray-600">
         {messages.map((message, idx) => (
-          <li key={idx} className="flex gap-4">
+          <li key={idx} className={`flex gap-4 first:mt-4`}>
             <div>
-              <Avatar initial={message.role === 'user' ? 'N' : 'B'} />
+              <Avatar initial={message.role === 'user' ? 'U' : 'B'} />
             </div>
             <div className="pt-1 markdown">
               <ReactMarkdown
